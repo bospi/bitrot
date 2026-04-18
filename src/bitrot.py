@@ -60,7 +60,10 @@ def normalize_path(path):
 
 
 def sha1(path, chunk_size):
-    digest = hashlib.sha1()
+    try:
+        digest = hashlib.new('sha1', usedforsecurity=False)
+    except TypeError:
+        digest = hashlib.new('sha1')  # nosec B324
     with open(path, 'rb') as f:
         d = f.read(chunk_size)
         while d:
